@@ -34,18 +34,18 @@ router.post('/', (req, res) => {
     
 })
 
-router.put('/:id', (req, res) => {
-    const productId = req.params.id
-    const updatedProduct = {
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description
-    }
-    Product.findByIdAndUpdate(productId, updatedProduct)
-        .then(result => res.status(203).json( {message: 'Update Successful'}))
-        .catch(err => res.status(500).json( {message: 'Server Error', error: err} ))
-})
+// router.put('/:id', (req, res) => {
+//     const productId = req.params.id
+//     const updatedProduct = {
+//         _id: new mongoose.Types.ObjectId(),
+//         name: req.body.name,
+//         price: req.body.price,
+//         description: req.body.description
+//     }
+//     Product.findOneAndReplace(productId, updatedProduct)
+//         .then(result => res.status(203).json( {message: 'Update Successful'}))
+//         .catch(err => res.status(500).json( {message: 'Server Error', error: err} ))
+// })
 
 router.patch('/:id', (req, res) => {
     const productId = req.params.id
@@ -60,8 +60,11 @@ router.patch('/:id', (req, res) => {
         .catch(err => res.status(500).json( {message: 'Server Error', error: err} ))
 })
 
-router.delete('/', (req, res) => {
-    res.status(200).json( {message: 'Handling DELETE requests to /products'} )
+router.delete('/:productId', (req, res) => {
+    const id = req.params.productId
+    Product.remove( {_id: id} )
+        .then(result => res.status(200).json( {message: 'Resouce Deleted', info: result} ))
+        .catch(err => res.status(500).json( {message: 'Server Error', error: err} ))
 })
 
 module.exports = router;
